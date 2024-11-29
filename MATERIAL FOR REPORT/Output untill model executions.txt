@@ -1,0 +1,683 @@
+## clean Duplicate values
+> DealWith_Duplicates(Cars_Kaggle)
+> 
+> ## clean missing values
+> ImputedData <- DealWith_MissingValues(Cars_Kaggle)
+> 
+> ## Adding New column for category type of car
+> 
+> 
+> 
+> ## outliers
+> ImputedData <- DealWith_Outliers(ImputedData,Cars_Kaggle)
+> 
+> 
+> ## extracting engine features
+> Engine_Featured_Data <- DealWith_ExtractingEngineFeatures(ImputedData)
+> 
+> 
+> 
+> ## final iteration of missing values
+> Engine_Featured_Data <- DealWith_MissingValuesFinal(Engine_Featured_Data)
+> 
+> 
+> #Engine_Featured_Data_Scaled <- Engine_Featured_Data %>% mutate(price = log(price))
+> 
+> ##  Conversions
+> ProcessedData <- DealWith_Converstions(Engine_Featured_Data)
+Warning message:
+There was 1 warning in `mutate()`.
+ℹ In argument: `across(all_of(NumericMutate_miss), ~as.numeric(.))`.
+Caused by warning:
+! NAs introduced by coercion 
+> 
+> 
+> 
+> 
+> 
+> ## Feature selection using backward elimination is done already and these are main features obtained, 
+> #The code for this is commented since this is not required to run everytime
+> 
+> inds <- Splitter(ProcessedData)
+> Web_Purpose_ProcessedData <- ProcessedData 
+> write.csv(Web_Purpose_ProcessedData, file = "Datasets/Web_Purpose_ProcessedData.csv")
+> write.csv(Web_Purpose_ProcessedData, file = "../FrontEnd/DATASETS/Web_Purpose_ProcessedData.csv")
+> 
+> ## Scaling Data
+> #ProcessedData <- Scaler_R(ProcessedData)
+> 
+> 
+> 
+> ProcessedData <- ProcessedData %>% select(c(price,
++                                             brand,
++                                             ModelYear=model_year,Milage=milage,EngineHorsepower=engine_horsepower,
++                                             FuelType=fuel_type,Transmission=transmission,Accident=accident,
++                                             EngineTechnology=engine_technology,EngineSpecial=engine_special,EngineConfiguration=engine_configuration)) 
+> # Dimensionality reduction
+> # reason for linear model: 
+> # feature selection has already been applied to remove unnecessary features, ensuring that the dataset retains only the most relevant ones, 
+> # It is not necessarily a condition to avoid dimension reduction technique if we apply feature selection but
+> # applying further Dimensionality reduction could risk removing valuable information. since the model is able to take less time after all the optimizations
+> # we concluded to not use Dimensionalityreduction
+> 
+> # reason for XGBoost: 
+> # XGBoost is designed to efficiently handle large feature sets and can automatically assess feature importance during training. 
+> # Due to its robust ability to capture complex relationships, Dimensionality reduction is not necessary. 
+> # In fact, reducing the feature set might remove important interactions that XGBoost could otherwise leverage for better predictions.
+> 
+> 
+> 
+> # split data
+> 
+> ProcessedData_Train <- ProcessedData[inds$train, ]
+> ProcessedData_Valid <- ProcessedData[inds$valid, ] 
+> ProcessedData_Test <- ProcessedData[inds$test, ] 
+> 
+> write.csv(ProcessedData, file = "Datasets/ProcessedData.csv")
+> write.csv(ProcessedData, file = "../FrontEnd/DATASETS/ProcessedData.csv")
+> 
+> write.csv(ProcessedData_Train, file = "Datasets/ProcessedData_Train.csv")
+> write.csv(ProcessedData_Train, file = "../FrontEnd/DATASETS/ProcessedData_Train.csv")
+> 
+> 
+> write.csv(ProcessedData_Test, file = "Datasets/ProcessedData_Test.csv")
+> write.csv(ProcessedData_Test, file = "../FrontEnd/DATASETS/ProcessedData_Test.csv")
+> 
+> write.csv(ProcessedData_Valid, file = "Datasets/ProcessedData_Valid.csv")
+> write.csv(ProcessedData_Valid, file = "../FrontEnd/DATASETS/ProcessedData_Valid.csv")
+> 
+> 
+> 
+> ## Onehot encoded DATA
+> OnehotencodedData <- OneHotEncoder_R(ProcessedData)
+> write.csv(OnehotencodedData, file = "Datasets/OnehotencodedData.csv")
+> write.csv(OnehotencodedData, file = "../FrontEnd/DATASETS/OnehotencodedData.csv")
+> 
+> 
+> OnehotencodedData_Train <- OnehotencodedData[inds$train, ]
+> write.csv(OnehotencodedData_Train, file = "Datasets/OnehotencodedData_Train.csv")
+> write.csv(OnehotencodedData_Train, file = "../FrontEnd/DATASETS/OnehotencodedData_Train.csv")
+> 
+> OnehotencodedData_Valid <- OnehotencodedData[inds$valid, ] 
+> write.csv(OnehotencodedData_Valid, file = "Datasets/OnehotencodedData_Valid.csv")
+> write.csv(OnehotencodedData_Valid, file = "../FrontEnd/DATASETS/OnehotencodedData_Valid.csv")
+> 
+> OnehotencodedData_Test <- OnehotencodedData[inds$test, ] 
+> write.csv(OnehotencodedData_Test, file = "Datasets/OnehotencodedData_Test.csv")
+> write.csv(OnehotencodedData_Test, file = "../FrontEnd/DATASETS/OnehotencodedData_Test.csv")
+> 
+> 
+> 
+> #Train data
+> 
+> source("./Models/Linearmodel.R")
+Loading data...
+Starting alpha tuning with Cross Validation...
+Initializing k-fold cross-validation for MultipleLinearRegression...
+Total alpha values to test: 20
+Number of folds: 5
+
+Evaluating alpha: 0.0001
+Model fitted with alpha=0.0001
+    Model trained for alpha=0.0001 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.0001
+    Model trained for alpha=0.0001 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.0001
+    Model trained for alpha=0.0001 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.0001
+    Model trained for alpha=0.0001 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.0001
+    Model trained for alpha=0.0001 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.0001: 0.4609
+  Alpha 0.0001 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.00026366508987303583
+Model fitted with alpha=0.00026366508987303583
+    Model trained for alpha=0.00026366508987303583 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.00026366508987303583
+    Model trained for alpha=0.00026366508987303583 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.00026366508987303583
+    Model trained for alpha=0.00026366508987303583 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.00026366508987303583
+    Model trained for alpha=0.00026366508987303583 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.00026366508987303583
+    Model trained for alpha=0.00026366508987303583 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.00026366508987303583: 0.4609
+  Alpha 0.00026366508987303583 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.0006951927961775605
+Model fitted with alpha=0.0006951927961775605
+    Model trained for alpha=0.0006951927961775605 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.0006951927961775605
+    Model trained for alpha=0.0006951927961775605 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.0006951927961775605
+    Model trained for alpha=0.0006951927961775605 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.0006951927961775605
+    Model trained for alpha=0.0006951927961775605 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.0006951927961775605
+    Model trained for alpha=0.0006951927961775605 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.0006951927961775605: 0.4609
+  Alpha 0.0006951927961775605 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.0018329807108324356
+Model fitted with alpha=0.0018329807108324356
+    Model trained for alpha=0.0018329807108324356 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.0018329807108324356
+    Model trained for alpha=0.0018329807108324356 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.0018329807108324356
+    Model trained for alpha=0.0018329807108324356 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.0018329807108324356
+    Model trained for alpha=0.0018329807108324356 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.0018329807108324356
+    Model trained for alpha=0.0018329807108324356 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.0018329807108324356: 0.4609
+  Alpha 0.0018329807108324356 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.004832930238571752
+Model fitted with alpha=0.004832930238571752
+    Model trained for alpha=0.004832930238571752 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.004832930238571752
+    Model trained for alpha=0.004832930238571752 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.004832930238571752
+    Model trained for alpha=0.004832930238571752 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.004832930238571752
+    Model trained for alpha=0.004832930238571752 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.004832930238571752
+    Model trained for alpha=0.004832930238571752 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.004832930238571752: 0.4609
+  Alpha 0.004832930238571752 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.012742749857031334
+Model fitted with alpha=0.012742749857031334
+    Model trained for alpha=0.012742749857031334 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.012742749857031334
+    Model trained for alpha=0.012742749857031334 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.012742749857031334
+    Model trained for alpha=0.012742749857031334 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.012742749857031334
+    Model trained for alpha=0.012742749857031334 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.012742749857031334
+    Model trained for alpha=0.012742749857031334 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.012742749857031334: 0.4609
+  Alpha 0.012742749857031334 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.03359818286283781
+Model fitted with alpha=0.03359818286283781
+    Model trained for alpha=0.03359818286283781 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.03359818286283781
+    Model trained for alpha=0.03359818286283781 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.03359818286283781
+    Model trained for alpha=0.03359818286283781 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.03359818286283781
+    Model trained for alpha=0.03359818286283781 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.03359818286283781
+    Model trained for alpha=0.03359818286283781 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=0.03359818286283781: 0.4609
+  Alpha 0.03359818286283781 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.08858667904100823
+Model fitted with alpha=0.08858667904100823
+    Model trained for alpha=0.08858667904100823 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3299, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.08858667904100823
+    Model trained for alpha=0.08858667904100823 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.08858667904100823
+    Model trained for alpha=0.08858667904100823 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.08858667904100823
+    Model trained for alpha=0.08858667904100823 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4637, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.08858667904100823
+    Model trained for alpha=0.08858667904100823 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6668, MAPE=3.27%
+  Average RMSE for alpha=0.08858667904100823: 0.4609
+  Alpha 0.08858667904100823 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.23357214690901212
+Model fitted with alpha=0.23357214690901212
+    Model trained for alpha=0.23357214690901212 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3298, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.23357214690901212
+    Model trained for alpha=0.23357214690901212 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=0.23357214690901212
+    Model trained for alpha=0.23357214690901212 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4598, MAE=0.3338, R²=0.6705, MAPE=3.29%
+Model fitted with alpha=0.23357214690901212
+    Model trained for alpha=0.23357214690901212 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4636, MAE=0.3345, R²=0.6631, MAPE=3.30%
+Model fitted with alpha=0.23357214690901212
+    Model trained for alpha=0.23357214690901212 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6668, MAPE=3.27%
+  Average RMSE for alpha=0.23357214690901212: 0.4609
+  Alpha 0.23357214690901212 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 0.615848211066026
+Model fitted with alpha=0.615848211066026
+    Model trained for alpha=0.615848211066026 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3298, R²=0.6756, MAPE=3.25%
+Model fitted with alpha=0.615848211066026
+    Model trained for alpha=0.615848211066026 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6673, MAPE=3.33%
+Model fitted with alpha=0.615848211066026
+    Model trained for alpha=0.615848211066026 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4599, MAE=0.3338, R²=0.6704, MAPE=3.29%
+Model fitted with alpha=0.615848211066026
+    Model trained for alpha=0.615848211066026 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4636, MAE=0.3345, R²=0.6632, MAPE=3.30%
+Model fitted with alpha=0.615848211066026
+    Model trained for alpha=0.615848211066026 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6668, MAPE=3.27%
+  Average RMSE for alpha=0.615848211066026: 0.4609
+  Alpha 0.615848211066026 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 1.623776739188721
+Model fitted with alpha=1.623776739188721
+    Model trained for alpha=1.623776739188721 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4542, MAE=0.3298, R²=0.6757, MAPE=3.25%
+Model fitted with alpha=1.623776739188721
+    Model trained for alpha=1.623776739188721 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6673, MAPE=3.33%
+Model fitted with alpha=1.623776739188721
+    Model trained for alpha=1.623776739188721 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4599, MAE=0.3338, R²=0.6704, MAPE=3.29%
+Model fitted with alpha=1.623776739188721
+    Model trained for alpha=1.623776739188721 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4635, MAE=0.3344, R²=0.6633, MAPE=3.30%
+Model fitted with alpha=1.623776739188721
+    Model trained for alpha=1.623776739188721 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6668, MAPE=3.27%
+  Average RMSE for alpha=1.623776739188721: 0.4609
+  Alpha 1.623776739188721 is currently the best with Avg RMSE: 0.4609
+
+Evaluating alpha: 4.281332398719396
+Model fitted with alpha=4.281332398719396
+    Model trained for alpha=4.281332398719396 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4542, MAE=0.3298, R²=0.6757, MAPE=3.25%
+Model fitted with alpha=4.281332398719396
+    Model trained for alpha=4.281332398719396 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4676, MAE=0.3374, R²=0.6672, MAPE=3.33%
+Model fitted with alpha=4.281332398719396
+    Model trained for alpha=4.281332398719396 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4600, MAE=0.3339, R²=0.6702, MAPE=3.30%
+Model fitted with alpha=4.281332398719396
+    Model trained for alpha=4.281332398719396 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4636, MAE=0.3344, R²=0.6632, MAPE=3.30%
+Model fitted with alpha=4.281332398719396
+    Model trained for alpha=4.281332398719396 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4592, MAE=0.3316, R²=0.6667, MAPE=3.27%
+  Average RMSE for alpha=4.281332398719396: 0.4609
+
+Evaluating alpha: 11.288378916846883
+Model fitted with alpha=11.288378916846883
+    Model trained for alpha=11.288378916846883 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4543, MAE=0.3300, R²=0.6755, MAPE=3.25%
+Model fitted with alpha=11.288378916846883
+    Model trained for alpha=11.288378916846883 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4680, MAE=0.3377, R²=0.6667, MAPE=3.34%
+Model fitted with alpha=11.288378916846883
+    Model trained for alpha=11.288378916846883 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4604, MAE=0.3343, R²=0.6697, MAPE=3.30%
+Model fitted with alpha=11.288378916846883
+    Model trained for alpha=11.288378916846883 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4640, MAE=0.3347, R²=0.6627, MAPE=3.30%
+Model fitted with alpha=11.288378916846883
+    Model trained for alpha=11.288378916846883 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4596, MAE=0.3319, R²=0.6662, MAPE=3.27%
+  Average RMSE for alpha=11.288378916846883: 0.4613
+
+Evaluating alpha: 29.763514416313132
+Model fitted with alpha=29.763514416313132
+    Model trained for alpha=29.763514416313132 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4555, MAE=0.3309, R²=0.6738, MAPE=3.26%
+Model fitted with alpha=29.763514416313132
+    Model trained for alpha=29.763514416313132 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4696, MAE=0.3389, R²=0.6644, MAPE=3.35%
+Model fitted with alpha=29.763514416313132
+    Model trained for alpha=29.763514416313132 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4618, MAE=0.3355, R²=0.6676, MAPE=3.31%
+Model fitted with alpha=29.763514416313132
+    Model trained for alpha=29.763514416313132 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4657, MAE=0.3360, R²=0.6601, MAPE=3.31%
+Model fitted with alpha=29.763514416313132
+    Model trained for alpha=29.763514416313132 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4612, MAE=0.3332, R²=0.6638, MAPE=3.28%
+  Average RMSE for alpha=29.763514416313132: 0.4628
+
+Evaluating alpha: 78.47599703514607
+Model fitted with alpha=78.47599703514607
+    Model trained for alpha=78.47599703514607 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4606, MAE=0.3350, R²=0.6665, MAPE=3.30%
+Model fitted with alpha=78.47599703514607
+    Model trained for alpha=78.47599703514607 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4754, MAE=0.3433, R²=0.6560, MAPE=3.39%
+Model fitted with alpha=78.47599703514607
+    Model trained for alpha=78.47599703514607 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4672, MAE=0.3398, R²=0.6599, MAPE=3.35%
+Model fitted with alpha=78.47599703514607
+    Model trained for alpha=78.47599703514607 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4718, MAE=0.3404, R²=0.6511, MAPE=3.35%
+Model fitted with alpha=78.47599703514607
+    Model trained for alpha=78.47599703514607 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4669, MAE=0.3374, R²=0.6555, MAPE=3.32%
+  Average RMSE for alpha=78.47599703514607: 0.4684
+
+Evaluating alpha: 206.913808111479
+Model fitted with alpha=206.913808111479
+    Model trained for alpha=206.913808111479 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.4775, MAE=0.3475, R²=0.6416, MAPE=3.42%
+Model fitted with alpha=206.913808111479
+    Model trained for alpha=206.913808111479 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.4931, MAE=0.3563, R²=0.6300, MAPE=3.51%
+Model fitted with alpha=206.913808111479
+    Model trained for alpha=206.913808111479 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.4841, MAE=0.3525, R²=0.6347, MAPE=3.47%
+Model fitted with alpha=206.913808111479
+    Model trained for alpha=206.913808111479 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.4898, MAE=0.3530, R²=0.6241, MAPE=3.47%
+Model fitted with alpha=206.913808111479
+    Model trained for alpha=206.913808111479 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.4839, MAE=0.3500, R²=0.6299, MAPE=3.44%
+  Average RMSE for alpha=206.913808111479: 0.4857
+
+Evaluating alpha: 545.5594781168514
+Model fitted with alpha=545.5594781168514
+    Model trained for alpha=545.5594781168514 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.5169, MAE=0.3759, R²=0.5801, MAPE=3.69%
+Model fitted with alpha=545.5594781168514
+    Model trained for alpha=545.5594781168514 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.5327, MAE=0.3846, R²=0.5681, MAPE=3.77%
+Model fitted with alpha=545.5594781168514
+    Model trained for alpha=545.5594781168514 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.5237, MAE=0.3811, R²=0.5727, MAPE=3.74%
+Model fitted with alpha=545.5594781168514
+    Model trained for alpha=545.5594781168514 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.5295, MAE=0.3812, R²=0.5606, MAPE=3.74%
+Model fitted with alpha=545.5594781168514
+    Model trained for alpha=545.5594781168514 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.5229, MAE=0.3787, R²=0.5680, MAPE=3.71%
+  Average RMSE for alpha=545.5594781168514: 0.5251
+
+Evaluating alpha: 1438.44988828766
+Model fitted with alpha=1438.44988828766
+    Model trained for alpha=1438.44988828766 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.5904, MAE=0.4318, R²=0.4521, MAPE=4.22%
+Model fitted with alpha=1438.44988828766
+    Model trained for alpha=1438.44988828766 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.6059, MAE=0.4406, R²=0.4413, MAPE=4.31%
+Model fitted with alpha=1438.44988828766
+    Model trained for alpha=1438.44988828766 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.5974, MAE=0.4378, R²=0.4437, MAPE=4.28%
+Model fitted with alpha=1438.44988828766
+    Model trained for alpha=1438.44988828766 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.6027, MAE=0.4378, R²=0.4307, MAPE=4.28%
+Model fitted with alpha=1438.44988828766
+    Model trained for alpha=1438.44988828766 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.5963, MAE=0.4358, R²=0.4382, MAPE=4.26%
+  Average RMSE for alpha=1438.44988828766: 0.5985
+
+Evaluating alpha: 3792.690190732246
+Model fitted with alpha=3792.690190732246
+    Model trained for alpha=3792.690190732246 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.7316, MAE=0.5483, R²=0.1586, MAPE=5.35%
+Model fitted with alpha=3792.690190732246
+    Model trained for alpha=3792.690190732246 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.7474, MAE=0.5586, R²=0.1499, MAPE=5.45%
+Model fitted with alpha=3792.690190732246
+    Model trained for alpha=3792.690190732246 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.7388, MAE=0.5550, R²=0.1494, MAPE=5.41%
+Model fitted with alpha=3792.690190732246
+    Model trained for alpha=3792.690190732246 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.7446, MAE=0.5554, R²=0.1312, MAPE=5.42%
+Model fitted with alpha=3792.690190732246
+    Model trained for alpha=3792.690190732246 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.7392, MAE=0.5542, R²=0.1364, MAPE=5.40%
+  Average RMSE for alpha=3792.690190732246: 0.7403
+
+Evaluating alpha: 10000.0
+Model fitted with alpha=10000.0
+    Model trained for alpha=10000.0 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.9752, MAE=0.7434, R²=-0.4948, MAPE=7.25%
+Model fitted with alpha=10000.0
+    Model trained for alpha=10000.0 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.9936, MAE=0.7572, R²=-0.5023, MAPE=7.38%
+Model fitted with alpha=10000.0
+    Model trained for alpha=10000.0 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.9800, MAE=0.7472, R²=-0.4966, MAPE=7.28%
+Model fitted with alpha=10000.0
+    Model trained for alpha=10000.0 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.9901, MAE=0.7536, R²=-0.5362, MAPE=7.34%
+Model fitted with alpha=10000.0
+    Model trained for alpha=10000.0 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.9865, MAE=0.7525, R²=-0.5378, MAPE=7.33%
+  Average RMSE for alpha=10000.0: 0.9850
+
+Best alpha found: 1.623776739188721 with Avg RMSE: 0.4609
+Training final model with best alpha: 1.623776739188721
+Model fitted with alpha=1.623776739188721
+Model saved to ../FrontEnd/Save/SavedModels/LM.pkl
+Model saved to Save/SavedModels/LM.pkl
+> source("./Models/XGBoost.R")
+Loading data...
+
+Starting cross-validation to tune max_depth for XGBoostScratch...
+Initializing k-fold cross-validation for XGBoostScratch...
+Total depth values to test: 4
+Number of folds: 5
+
+Evaluating max_depth: 2
+    Model trained for max_depth=2 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.6781, MAE=0.5186, R²=0.2773, MAPE=5.15%
+    Model trained for max_depth=2 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.6753, MAE=0.5138, R²=0.3060, MAPE=5.11%
+    Model trained for max_depth=2 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.6720, MAE=0.5121, R²=0.2963, MAPE=5.09%
+    Model trained for max_depth=2 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.6772, MAE=0.5155, R²=0.2812, MAPE=5.12%
+    Model trained for max_depth=2 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.6655, MAE=0.5072, R²=0.3001, MAPE=5.03%
+  Average RMSE for max_depth=2: 0.6736
+  Max Depth 2 is currently the best with Avg RMSE: 0.6736
+
+Evaluating max_depth: 4
+    Model trained for max_depth=4 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.6676, MAE=0.5084, R²=0.2994, MAPE=5.05%
+    Model trained for max_depth=4 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.6836, MAE=0.5217, R²=0.2888, MAPE=5.19%
+    Model trained for max_depth=4 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.6588, MAE=0.5001, R²=0.3235, MAPE=4.97%
+    Model trained for max_depth=4 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.6441, MAE=0.4844, R²=0.3499, MAPE=4.81%
+    Model trained for max_depth=4 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.6614, MAE=0.5038, R²=0.3087, MAPE=5.00%
+  Average RMSE for max_depth=4: 0.6631
+  Max Depth 4 is currently the best with Avg RMSE: 0.6631
+
+Evaluating max_depth: 6
+    Model trained for max_depth=6 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.6519, MAE=0.4937, R²=0.3319, MAPE=4.90%
+    Model trained for max_depth=6 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.6741, MAE=0.5125, R²=0.3084, MAPE=5.10%
+    Model trained for max_depth=6 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.6559, MAE=0.4973, R²=0.3296, MAPE=4.94%
+    Model trained for max_depth=6 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.6594, MAE=0.4992, R²=0.3186, MAPE=4.95%
+    Model trained for max_depth=6 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.6547, MAE=0.4972, R²=0.3226, MAPE=4.93%
+  Average RMSE for max_depth=6: 0.6592
+  Max Depth 6 is currently the best with Avg RMSE: 0.6592
+
+Evaluating max_depth: 8
+    Model trained for max_depth=8 on fold 1.
+    Training set size: 114856 samples, Validation set size: 28715 samples.
+    Metrics for fold 1: RMSE=0.6588, MAE=0.5000, R²=0.3178, MAPE=4.96%
+    Model trained for max_depth=8 on fold 2.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 2: RMSE=0.6595, MAE=0.4985, R²=0.3381, MAPE=4.95%
+    Model trained for max_depth=8 on fold 3.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 3: RMSE=0.6485, MAE=0.4902, R²=0.3446, MAPE=4.87%
+    Model trained for max_depth=8 on fold 4.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 4: RMSE=0.6639, MAE=0.5035, R²=0.3093, MAPE=5.00%
+    Model trained for max_depth=8 on fold 5.
+    Training set size: 114857 samples, Validation set size: 28714 samples.
+    Metrics for fold 5: RMSE=0.6678, MAE=0.5105, R²=0.2952, MAPE=5.06%
+  Average RMSE for max_depth=8: 0.6597
+
+Best max_depth found: 6 with Avg RMSE: 0.6592
+
+Training final model with best max_depth: 6
+Final XGBoost model saved to Save/SavedModels/XGB.pkl
+Final XGBoost model saved to ../FrontEnd/Save/SavedModels/XGB.pkl

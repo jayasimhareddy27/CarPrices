@@ -1,0 +1,12 @@
+name: FrontEnd
+title: FrontEnd
+username: usedcarprices
+account: usedcarprices
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13478157
+bundleId: 9435714
+url: https://usedcarprices.shinyapps.io/FrontEnd/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

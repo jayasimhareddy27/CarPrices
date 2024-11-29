@@ -1,0 +1,135 @@
+brand_Alfa
+brand_Aston
+brand_Audi
+brand_Bentley
+brand_BMW
+brand_Bugatti
+brand_Buick
+brand_Cadillac
+brand_Chevrolet
+brand_Chrysler
+brand_Dodge
+brand_Ferrari
+brand_FIAT
+brand_Ford
+brand_Genesis
+brand_GMC
+brand_Honda
+brand_Hummer
+brand_Hyundai
+brand_INFINITI
+brand_Jaguar
+brand_Jeep
+brand_Karma
+brand_Kia
+brand_Lamborghini
+brand_Land
+brand_Lexus
+brand_Lincoln
+brand_Lotus
+brand_Lucid
+brand_Maserati
+brand_Maybach
+brand_Mazda
+brand_McLaren
+brand_Mercedes-Benz
+brand_Mercury
+brand_MINI
+brand_Mitsubishi
+brand_Nissan
+brand_Plymouth
+brand_Polestar
+brand_Pontiac
+brand_Porsche
+brand_RAM
+brand_Rivian
+brand_Rolls-Royce
+brand_Saab
+brand_Saturn
+brand_Scion
+brand_smart
+brand_Subaru
+brand_Suzuki
+brand_Tesla
+brand_Toyota
+brand_Volkswagen
+brand_Volvo
+ModelYear
+Milage
+EngineHorsepower
+FuelType_E85 Flex Fuel
+FuelType_Electric/Hybrid
+FuelType_Gasoline
+FuelType_Hybrid
+FuelType_not supported
+FuelType_Plug-In Hybrid
+Transmission_1-Speed Automatic
+Transmission_10-Speed A/T
+Transmission_10-Speed Automatic
+Transmission_10-Speed Automatic with Overdrive
+Transmission_2
+Transmission_2-Speed A/T
+Transmission_2-Speed Automatic
+Transmission_4-Speed A/T
+Transmission_4-Speed Automatic
+Transmission_5-Speed A/T
+Transmission_5-Speed Automatic
+Transmission_5-Speed M/T
+Transmission_6-Speed
+Transmission_6-Speed A/T
+Transmission_6-Speed Automatic
+Transmission_6-Speed Automatic with Auto-Shift
+Transmission_6-Speed Electronically Controlled Automatic with O
+Transmission_6-Speed M/T
+Transmission_6-Speed Manual
+Transmission_6 Speed At/Mt
+Transmission_6 Speed Mt
+Transmission_7-Speed
+Transmission_7-Speed A/T
+Transmission_7-Speed Automatic
+Transmission_7-Speed Automatic with Auto-Shift
+Transmission_7-Speed DCT Automatic
+Transmission_7-Speed M/T
+Transmission_7-Speed Manual
+Transmission_8-Speed A/T
+Transmission_8-SPEED A/T
+Transmission_8-SPEED AT
+Transmission_8-Speed Automatic
+Transmission_8-Speed Automatic with Auto-Shift
+Transmission_8-Speed Manual
+Transmission_9-Speed A/T
+Transmission_9-Speed Automatic
+Transmission_9-Speed Automatic with Auto-Shift
+Transmission_A/T
+Transmission_Automatic
+Transmission_Automatic CVT
+Transmission_CVT-F
+Transmission_CVT Transmission
+Transmission_F
+Transmission_M/T
+Transmission_Manual
+Transmission_SCHEDULED FOR OR IN PRODUCTION
+Transmission_Single-Speed Fixed Gear
+Transmission_Transmission Overdrive Switch
+Transmission_Transmission w/Dual Shift Mode
+Transmission_Variable
+Accident_Didnt report
+Accident_None reported
+EngineTechnology_gdi
+EngineTechnology_gdi, dohc
+EngineTechnology_gdi, sohc
+EngineTechnology_mpfi
+EngineTechnology_mpfi, dohc
+EngineTechnology_mpfi, sohc
+EngineTechnology_None
+EngineTechnology_pdi, dohc
+EngineTechnology_sohc
+EngineTechnology_tsi
+EngineSpecial_Supercharged
+EngineSpecial_Turbocharged
+EngineSpecial_Twin Turbo
+EngineConfiguration_Inline
+EngineConfiguration_Rotary
+EngineConfiguration_straight
+EngineConfiguration_V
+EngineConfiguration_W

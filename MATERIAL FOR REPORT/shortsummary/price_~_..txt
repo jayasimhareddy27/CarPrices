@@ -1,0 +1,2 @@
+Multiple R-squared:  0.2789,	Adjusted R-squared:  0.2663 
+F-statistic: 22.11 on 2078 and 118774 DF,  p-value: < 2.2e-16
